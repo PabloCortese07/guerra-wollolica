@@ -38,6 +38,11 @@ object alianza {
   method nombresDeCampeones() = ejercito.filter({soldado => soldado.esCampeon()}).map({soldado => soldado.nombre()})
 }
 
+/*
+terminado
+
+*/
+
 
 
 
