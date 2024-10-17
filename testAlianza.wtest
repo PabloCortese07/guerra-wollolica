@@ -1,0 +1,145 @@
+import alianza.*
+import guerreros.*
+
+
+describe "Luke" {
+  test "Luke entrena sin cambiar de sable, la Alianza intenta reclutar a Luke pero no puede debido a su bajo poder y Luke aún no es un campeón." {
+    luke.entrenar()
+    alianza.reclutar(luke)
+    
+    // assert.that(alianza.ejercito().contains(luke))
+    assert.notEquals([luke], alianza.ejercito())
+  }
+
+  test "Luke cambia el sabe al Azul y entrena. La Alianza ahora sí puede reclutarlo y luke pasa a ser campeón." {
+    luke.cambiarSable(sableAzul)
+    luke.entrenar()
+    alianza.reclutar(luke)
+    
+    assert.that(alianza.ejercito().contains(luke))
+  }
+}
+
+describe "Yoda" {
+  test "Yoda alterna para usar la fuerza y entrenar. Su poder aumenta a 100. Pero aún no puede ser reclutado porque su energia esta en 30 unidades aunque es un campeón. " {
+    yoda.alternarFuerza()
+    yoda.entrenar()
+    alianza.reclutar(yoda)
+    assert.notThat(alianza.ejercito().contains(yoda))
+  }
+
+  test "Yoda entrena sin usar la fuerza. Ahora puede ser reclutado por la alianza porque su poder se mantiene en 50 pero su energía aumento a 55 unidades." {
+    yoda.entrenar()
+    alianza.reclutar(yoda)
+    assert.that(alianza.ejercito().contains(yoda))
+  }
+}
+
+describe "R2-D2" {
+  test "Arturito no puede ser reclutado por La Alianza." {
+    alianza.reclutar(arturito)
+    assert.notThat(alianza.ejercito().contains(arturito))
+  }
+
+  test "Al entrenar la salud de Arturito cambia a 60 y su poder se reduce a 78. Ahora sí puede ser reclutado aunque en no es campeón." {
+    arturito.entrenar()
+    alianza.reclutar(arturito)
+    assert.that(alianza.ejercito().contains(arturito))
+  }
+}
+
+describe "C3-P0" {
+  test "C-3PO siempre puede ser reclutado por La Alianza, porque su poder de 30 y su salud de 80 unidades no varían." {
+    alianza.reclutar(c3p0)
+    assert.that(alianza.ejercito().contains(c3p0))
+  }
+
+  test "C-3PO repara el Halcón Milenario, y su blindaje y velocidad mejoran a 700 y 1200, respectivamente, porque aún no es campeón." {
+    c3p0.repararElHalcon()
+    
+    assert.equals(1200, halconMilenario.blindaje())
+    assert.equals(700, halconMilenario.velocidad())
+  }
+}
+describe "la alianza galactica" {
+  method entrenar(){
+    luke.entrenar()
+    yoda.entrenar()
+    c3p0.entrenar()
+    arturito.entrenar()
+  }
+
+  method reclutar(){
+    alianza.reclutar(luke)
+    alianza.reclutar(yoda)
+    alianza.reclutar(c3p0)
+    alianza.reclutar(arturito)
+  }
+
+  test "El tamaño del ejército es de solo 3 guerreros." {
+    self.entrenar()
+    self.reclutar()
+
+    assert.equals(3, alianza.cantidadDeSoldados())
+  }
+
+  test "Los miembros del ejército son Yoda, Arturito y C-3PO." {
+    self.entrenar()
+    self.reclutar()
+    
+    assert.that(alianza.ejercito().contains(yoda))
+    assert.that( alianza.ejercito().contains(c3p0))
+    assert.that(alianza.ejercito().contains(arturito))
+  }
+
+  test "El poder total del ejército es 233" {
+    self.entrenar()
+    self.reclutar()
+    
+    assert.equals(233, alianza.poderTotal())
+  }
+
+  test "No es un ejército poderoso" {
+    self.entrenar()
+    self.reclutar()
+    
+    assert.notThat(alianza.ejercitoConPoderMayorA50())
+  }
+
+  test "Es invencible porque, aunque no es poderoso, tiene un campeón." {
+    self.entrenar()
+    self.reclutar()
+    
+    assert.that(alianza.esInvencible())
+  }
+
+  test "Los guerreros débiles con un parámetro de 59 son únicamente Yoda." {
+    self.entrenar()
+    self.reclutar()
+    
+    assert.equals([yoda], alianza.guerrerosMasDevilesQue(59))
+  }
+
+  test "No ganaría una batalla si el parámetro fuera de 250" {
+    self.entrenar()
+    self.reclutar()
+    
+    assert.notThat(alianza.esBatallaGanada(250))
+  }
+
+  test "Poca salud y mucho poder es verdadero." {
+    self.entrenar()
+    self.reclutar()
+   
+    assert.that(alianza.diferenciaDePoderes())
+  }
+
+  test "La lista de nombres de los guerreros campeones es Din Grogu y C-3PO." {
+    self.entrenar()
+    self.reclutar()
+   
+    //assert.equals(["Din Grogu", "C-3PO"], alianza.nombresDeCampeones())
+    assert.that(alianza.nombresDeCampeones().contains("Din Grogu"))
+    assert.that(alianza.nombresDeCampeones().contains("C-3PO"))
+  }
+}
